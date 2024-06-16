@@ -1,0 +1,52 @@
+.file-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.preview-table {
+  border-collapse: collapse;
+  margin: 25px 0;
+  font: 0.9em sans-serif;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  width: 75%;
+
+  thead tr {
+    background-color: #1474fc;
+    color: #ffffff;
+    text-align: left;
+  }
+
+  th,
+  td {
+    padding: 12px 15px;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid #dddddd;
+  }
+
+  tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+  }
+
+  tbody tr:last-of-type {
+    border-bottom: 2px solid #1474fc;
+  }
+
+  tbody tr.active-row {
+    font-weight: bold;
+    color: #1474fc;
+  }
+
+  th:first-child,
+  td:first-child {
+    width: 20%;
+    border-radius: 8px 0 0 0;
+  }
+
+  th:last-child,
+  td:last-child {
+    border-radius: 0 8px 0 0;
+  }
+}
