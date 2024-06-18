@@ -1,29 +1,24 @@
+import { Lecture } from "../../client/api";
 import { Table, TableProps } from "../../components/table";
 
-type Course = {
-  id: string;
-  title: string;
-  isEnabled: boolean;
-};
-
-type CoursesTableProps = {
-  data: Course[];
+type LecturesTableProps = {
+  data: Lecture[];
 };
 
 // Renderizar estado como toggle
-export const CoursesTable = (props: CoursesTableProps) => {
-  const columns: TableProps<Course>["columns"] = [
+export const LecturesTable = (props: LecturesTableProps) => {
+  const columns: TableProps<Lecture>["columns"] = [
     {
       title: "Título",
       dataIndex: "title",
     },
-    {
-      title: "Estado",
-      dataIndex: "isEnabled",
-      render: (isEnabled) => {
-        return isEnabled ? "Habilitado" : "Deshabilitado";
-      },
-    },
+    // {
+    //   title: "Estado",
+    //   dataIndex: "isEnabled",
+    //   render: (isEnabled) => {
+    //     return isEnabled ? "Habilitado" : "Deshabilitado";
+    //   },
+    // },
   ];
 
   return (

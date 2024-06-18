@@ -1,11 +1,23 @@
 import { Button } from "../components/button";
 import { PlusOutlined } from "@ant-design/icons";
-import { CoursesTable } from "./components/course-table";
+import { LecturesTable } from "./components/lectures-table";
 import { Module } from "./module";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { getLectures } from "../client/api";
 
-export const Modules = () => {
+export const Lectures = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const {
+    data: lectures,
+    isLoading,
+    isError,
+  } = useQuery({ queryKey: ["lectures"], queryFn: getLectures });
+
+  if (isLoading) return <p>Loading...</p>;
+  if (isError) return <p>Error loading todos.</p>;
+
   return (
     <>
       <div
@@ -25,30 +37,7 @@ export const Modules = () => {
             setIsModalOpen(true);
           }}
         />
-        <CoursesTable
-          data={[
-            {
-              id: "1",
-              title: "Primera prueba",
-              isEnabled: true,
-            },
-            {
-              id: "2",
-              title: "Segunda prueba",
-              isEnabled: false,
-            },
-            {
-              id: "3",
-              title: "Tercera prueba",
-              isEnabled: true,
-            },
-            {
-              id: "4",
-              title: "Prueba prueba",
-              isEnabled: true,
-            },
-          ]}
-        />
+        <LecturesTable data={lectures ?? []} />
       </div>
       <Module
         isOpen={isModalOpen}

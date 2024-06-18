@@ -2,18 +2,18 @@ import { Form, Input, Typography } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { useEffect } from "react";
 
-type NameProps = {
-  name?: string;
-  onNameChange: (name: string) => void;
+type LectureProps = {
+  title?: string;
+  onTitleChange: (title: string) => void;
   onIsInvalidChange: (isInvalid: boolean) => void;
 };
 
-export const Name = ({
+export const Lecture = ({
   onIsInvalidChange,
-  onNameChange,
+  onTitleChange,
   ...props
-}: NameProps) => {
-  const [form] = useForm<{ name: string }>();
+}: LectureProps) => {
+  const [form] = useForm<{ title: string }>();
 
   const values = Form.useWatch([], form);
 
@@ -25,7 +25,7 @@ export const Name = ({
       })
       .catch(() => onIsInvalidChange(true))
       .finally(() => {
-        onNameChange(values.name);
+        onTitleChange(values.title);
       });
   }, [form, values]);
 
@@ -34,13 +34,13 @@ export const Name = ({
       <Typography.Title level={5}>
         Paso 1: Coloca un nombre al módulo
       </Typography.Title>
-      <Form form={form} initialValues={{ name: props.name }}>
+      <Form form={form} initialValues={{ title: props.title }}>
         <Form.Item
-          name="name"
+          name="title"
           rules={[{ required: true, message: "", max: 25 }]}
         >
           <Input
-            value={props.name}
+            value={props.title}
             size="large"
             count={{
               show: true,

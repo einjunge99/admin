@@ -61,7 +61,7 @@ export const FileUpload = ({ ...props }: FileUploadProps) => {
   };
 
   const modelUploadProps: UploadProps = {
-    accept: ".txt",
+    accept: ".h5",
     listType: "picture",
     onRemove: () => {
       props.onModelFileChange(null);
@@ -74,7 +74,7 @@ export const FileUpload = ({ ...props }: FileUploadProps) => {
   };
 
   const labelsUploadProps: UploadProps = {
-    accept: ".txt",
+    accept: ".csv",
     listType: "picture",
     onRemove: () => {
       props.onLabelsFileChange(null);

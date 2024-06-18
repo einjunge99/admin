@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Modal from "antd/es/modal/Modal";
 import { RcFile } from "antd/es/upload";
-import { Label, PartialLabel } from "./types";
+import { PartialLabel } from "./types";
 import { Labels } from "./components/labels";
 import { FileUpload } from "./components/file-upload";
-import { Name } from "./components/name";
+import { Lecture } from "./components/lecture";
 import { Typography } from "antd";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { addLecture } from "../../client/api";
+import { NotificationContext } from "../root";
 
 // const props: UploadProps = {
 //   beforeUpload: (file) => {
@@ -21,7 +24,7 @@ import { Typography } from "antd";
 // };
 
 const STEP = {
-  NAME: "name",
+  LECTURE: "lecture",
   FILE_UPLOAD: "file_upload",
   LABELS: "labels",
 } as const;
@@ -39,7 +42,7 @@ const BUTTON_TEXT_PER_STEP: Record<
   StepType,
   { cancelText: string; okText: string }
 > = {
-  [STEP.NAME]: {
+  [STEP.LECTURE]: {
     cancelText: "Cancelar",
     okText: "Siguiente",
   },
@@ -54,29 +57,54 @@ const BUTTON_TEXT_PER_STEP: Record<
 };
 
 export const Module = (props: ModuleProps) => {
-  const [step, setStep] = useState<StepType>("name");
+  const context = useContext(NotificationContext);
+  const queryClient = useQueryClient();
+  const [step, setStep] = useState<StepType>("lecture");
   const [isModelDisabled, setIsModelDisabled] = useState(false);
   const [labelsFile, setLabelsFile] = useState<RcFile | null>(null);
   const [isInvalid, setIsInvalid] = useState<boolean>(false);
   const [content, setContent] = useState<{
-    name: string;
+    title: string;
     modelFile: RcFile | null;
     labels: PartialLabel[] | null;
   }>({
-    name: "",
+    title: "",
     modelFile: null,
     labels: [],
   });
 
+  const addLectureMutation = useMutation({
+    mutationFn: addLecture,
+    onSuccess: () => {
+      context?.notify(
+        {
+          message: "Leccción creada exitósamente",
+        },
+        "success"
+      );
+      queryClient.invalidateQueries({ queryKey: ["lectures"] });
+      props.onClose();
+    },
+    onError: () => {
+      context?.notify(
+        {
+          message: "Algo salió mal...",
+          description: "Por favor, vuelve a intentar en unos minutos",
+        },
+        "error"
+      );
+    },
+  });
+
   const renderStep = () => {
     switch (step) {
-      case "name":
+      case "lecture":
         return (
-          <Name
-            name={content.name}
+          <Lecture
+            title={content.title}
             onIsInvalidChange={setIsInvalid}
-            onNameChange={(name) => {
-              setContent((previousContent) => ({ ...previousContent, name }));
+            onTitleChange={(title) => {
+              setContent((previousContent) => ({ ...previousContent, title }));
             }}
           />
         );
@@ -133,6 +161,13 @@ export const Module = (props: ModuleProps) => {
 
     if (nextIndex < STEPS.length) {
       setStep(STEPS[nextIndex]);
+    } else {
+      addLectureMutation.mutate({
+        ...content,
+        model: content.modelFile,
+        labels: JSON.stringify(content.labels),
+      });
+      props.onClose();
     }
   };
 
@@ -159,6 +194,7 @@ export const Module = (props: ModuleProps) => {
       onOk={handleNextStep}
       okButtonProps={{
         disabled: isInvalid,
+        loading: addLectureMutation.isPending,
       }}
       onCancel={handlePreviousStep}
       {...BUTTON_TEXT_PER_STEP[step]}
