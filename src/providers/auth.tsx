@@ -1,24 +1,34 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import "firebase/auth";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { auth, googleProvider, signInWithPopup } from "../firebase";
-import { User, signInWithEmailAndPassword } from "firebase/auth";
-import { useNotification } from "./notification";
+import { User as AuthUser, signInWithEmailAndPassword } from "firebase/auth";
 import { getUser } from "../client/api";
 
+type User = {
+  authProvider: string;
+  displayName: string;
+  email: string;
+  role?: "admin";
+  uid: string;
+};
+
 const AuthContext = createContext<{
+  isLoading: boolean;
   user: User | null;
   error: unknown | null;
-  loginWithGoogle: () => Promise<void>;
-  loginWithEmailAndPassword: (email: string, password: string) => Promise<void>;
-  logout: () => Promise<void>;
+  loginWithGoogle: () => void;
+  loginWithEmailAndPassword: (email: string, password: string) => void;
+  logout: () => void;
+  deleteAccount: () => void;
 }>({
+  isLoading: false,
   user: null,
   error: null,
-  loginWithGoogle: () => Promise.resolve(),
-  loginWithEmailAndPassword: () => Promise.resolve(),
-  logout: () => Promise.resolve(),
+  loginWithGoogle: () => {},
+  loginWithEmailAndPassword: () => {},
+  logout: () => {},
+  deleteAccount: () => {},
 });
 
 export const useAuth = () => {
@@ -27,7 +37,16 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [authUser, setAuthUser] = useState<AuthUser | null>(null);
   const [error, setError] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+
+  const handleError = (error) => {
+    setError(error);
+    setTimeout(() => {
+      setError(null);
+    }, 500);
+  };
 
   const getUserMutation = useMutation({
     mutationFn: getUser,
@@ -35,43 +54,51 @@ export const AuthProvider = ({ children }) => {
       setUser(user);
     },
     onError: (error) => {
-      setError(error);
+      handleError(error);
     },
   });
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (userAuth) => {
-      console.log("auth changed");
-      if (userAuth) {
-        getUserMutation.mutate(userAuth.uid);
+    const unsubscribe = auth.onAuthStateChanged(async (authUser) => {
+      setIsLoading(false);
+      setAuthUser(authUser);
+      if (authUser) {
+        getUserMutation.mutate(authUser.uid);
       } else {
         setUser(null);
+        logout();
       }
     });
 
     return unsubscribe;
   }, []);
 
-  const loginWithGoogle = async () => {
-    await signInWithPopup(auth, googleProvider);
+  const loginWithGoogle = () => {
+    signInWithPopup(auth, googleProvider).catch(handleError);
   };
 
-  const loginWithEmailAndPassword = async (email: string, password: string) => {
-    await signInWithEmailAndPassword(auth, email, password);
+  const loginWithEmailAndPassword = (email: string, password: string) => {
+    signInWithEmailAndPassword(auth, email, password).catch(handleError);
   };
 
-  const logout = async () => {
-    await auth.signOut();
+  const deleteAccount = () => {
+    authUser?.delete();
+  };
+
+  const logout = () => {
+    auth.signOut();
   };
 
   return (
     <AuthContext.Provider
       value={{
+        isLoading: getUserMutation.isPending || isLoading,
         user,
         error,
         loginWithGoogle,
         loginWithEmailAndPassword,
         logout,
+        deleteAccount,
       }}
     >
       {children}

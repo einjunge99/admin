@@ -1,50 +1,48 @@
-import { Button } from "../components/button";
+import { Button } from "../../components/button";
 import { PlusOutlined } from "@ant-design/icons";
-import { LecturesTable } from "./components/lectures-table";
-import { Module } from "./module";
+import { LecturesTable } from "../components/lectures-table";
+import { LectureBuilder } from "../lecture-builder";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getLectures } from "../client/api";
+import { getLectures } from "../../client/api";
+import { BaseLayout } from "../../components/layout";
 
 export const Lectures = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const {
-    data: lectures,
-    isLoading,
-    isError,
-  } = useQuery({ queryKey: ["lectures"], queryFn: getLectures });
-
-  if (isLoading) return <p>Loading...</p>;
-  if (isError) return <p>Error loading todos.</p>;
+  const { data: lectures, isLoading } = useQuery({
+    queryKey: ["lectures"],
+    queryFn: getLectures,
+  });
 
   return (
-    <>
+    <BaseLayout>
       <div
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: 8,
+          gap: 12,
         }}
       >
         <Button
           style={{
             alignSelf: "end",
           }}
+          type="primary"
           label="Agregar curso"
           icon={<PlusOutlined />}
           onClick={() => {
             setIsModalOpen(true);
           }}
         />
-        <LecturesTable data={lectures ?? []} />
+        <LecturesTable data={lectures ?? []} isLoading={isLoading} />
       </div>
-      <Module
+      <LectureBuilder
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
         }}
       />
-    </>
+    </BaseLayout>
   );
 };

@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { Label, PartialLabel } from "../pages/module/types";
+import { Label, PartialLabel } from "../pages/lecture-builder/types";
 import { RcFile } from "antd/es/upload";
 
 const API_URL = "http://0.0.0.0:8080/api/v1";

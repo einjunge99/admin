@@ -42,7 +42,9 @@ export const Labels = (props: LabelsProps) => {
     let isInvalid = extraLabels.length + modelLabels.length < 5;
 
     if (isInvalid) {
-      setError("Al menos cinco etiquetas son requeridas para crear un módulo");
+      setError(
+        "Al menos cinco etiquetas son requeridas para crear una lección"
+      );
     } else {
       isInvalid =
         validateLabels(extraLabels, ["label", "url"]) ||

@@ -6,6 +6,8 @@ import { useAuth } from "../../providers/auth";
 import { useNavigate } from "react-router-dom";
 import { useNotification } from "../../providers/notification";
 import { useEffect } from "react";
+import { FirebaseError } from "firebase/app";
+import { AuthErrorCodes } from "firebase/auth";
 
 export const Login = () => {
   const { user, error, loginWithEmailAndPassword, loginWithGoogle } = useAuth();
@@ -20,10 +22,20 @@ export const Login = () => {
 
   useEffect(() => {
     if (error) {
+      let description = "Por favor, vuelve a intentar en unos minutos";
+
+      if (error instanceof FirebaseError) {
+        switch (error.code) {
+          case "auth/user-not-found":
+            description = "Usuario no encontrado";
+            break;
+        }
+      }
+
       notify(
         {
           message: "Algo salió mal...",
-          description: "Por favor, vuelve a intentar en unos minutos",
+          description,
         },
         "error"
       );

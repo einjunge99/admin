@@ -1,17 +1,25 @@
 import React, { FC, useEffect } from "react";
-import { redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../providers/auth";
+import { Spin } from "antd";
 
 interface PrivateRouteProps {
   element: React.ReactNode;
 }
 
 export const PrivateRoute: FC<PrivateRouteProps> = ({ element }) => {
-  const { user } = useAuth();
+  const { user, isLoading } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    redirect("/login");
-  }, [user]);
+    if (!user && !isLoading) {
+      navigate("/login", { replace: true });
+    }
+  }, [user, isLoading]);
+
+  if (isLoading) {
+    return <Spin spinning={isLoading} fullscreen />;
+  }
 
   return element;
 };

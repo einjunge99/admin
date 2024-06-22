@@ -33,7 +33,7 @@ const STEPS = Object.values(STEP);
 
 type StepType = (typeof STEP)[keyof typeof STEP];
 
-type ModuleProps = {
+type LectureProps = {
   isOpen: boolean;
   onClose: () => void;
 };
@@ -56,7 +56,7 @@ const BUTTON_TEXT_PER_STEP: Record<
   },
 };
 
-export const Module = (props: ModuleProps) => {
+export const LectureBuilder = (props: LectureProps) => {
   const context = useNotification();
   const queryClient = useQueryClient();
   const [step, setStep] = useState<StepType>("lecture");
@@ -171,27 +171,34 @@ export const Module = (props: ModuleProps) => {
     }
   };
 
-  const handlePreviousStep = () => {
-    console.log("handlePreviousStep");
-    const currentIndex = STEPS.indexOf(step);
-    const prevIndex = currentIndex - 1;
+  const handlePreviousStep = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    if (event.currentTarget.id) {
+      const currentIndex = STEPS.indexOf(step);
+      const prevIndex = currentIndex - 1;
 
-    if (prevIndex >= 0) {
-      setStep(STEPS[prevIndex]);
+      if (prevIndex >= 0) {
+        setStep(STEPS[prevIndex]);
+      } else {
+        props.onClose();
+      }
     } else {
       props.onClose();
     }
   };
 
-  console.log("content", JSON.stringify(content, null, 2));
-
   return (
     <Modal
       onClose={props.onClose}
-      title={<Typography.Title level={3}>Nuevo módulo</Typography.Title>}
+      title={<Typography.Title level={3}>Nueva lección</Typography.Title>}
       centered
       open={props.isOpen}
       onOk={handleNextStep}
+      destroyOnClose
+      cancelButtonProps={{
+        id: "close-button",
+      }}
       okButtonProps={{
         disabled: isInvalid,
         loading: addLectureMutation.isPending,

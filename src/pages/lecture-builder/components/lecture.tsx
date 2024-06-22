@@ -25,14 +25,14 @@ export const Lecture = ({
       })
       .catch(() => onIsInvalidChange(true))
       .finally(() => {
-        onTitleChange(values.title);
+        onTitleChange(values?.title);
       });
   }, [form, values]);
 
   return (
     <>
       <Typography.Title level={5}>
-        Paso 1: Coloca un nombre al módulo
+        Paso 1: Coloca un nombre a la lección
       </Typography.Title>
       <Form form={form} initialValues={{ title: props.title }}>
         <Form.Item

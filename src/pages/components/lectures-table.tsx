@@ -3,6 +3,7 @@ import { Table, TableProps } from "../../components/table";
 
 type LecturesTableProps = {
   data: Lecture[];
+  isLoading: boolean;
 };
 
 // Renderizar estado como toggle
@@ -23,6 +24,7 @@ export const LecturesTable = (props: LecturesTableProps) => {
 
   return (
     <Table
+      loading={props.isLoading}
       columns={columns}
       data={props.data}
       onRow={() => {
