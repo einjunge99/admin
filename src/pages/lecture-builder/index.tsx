@@ -10,19 +10,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addLecture } from "../../client/api";
 import { useNotification } from "../../providers/notification";
 
-// const props: UploadProps = {
-//   beforeUpload: (file) => {
-//     const isPNG = file.type === 'image/png';
-//     if (!isPNG) {
-//       message.error(`${file.name} is not a png file`);
-//     }
-//     return isPNG || Upload.LIST_IGNORE;
-//   },
-//   onChange: (info) => {
-//     console.log(info.fileList);
-//   },
-// };
-
 const STEP = {
   LECTURE: "lecture",
   FILE_UPLOAD: "file_upload",
@@ -64,10 +51,12 @@ export const LectureBuilder = (props: LectureProps) => {
   const [labelsFile, setLabelsFile] = useState<RcFile | null>(null);
   const [isInvalid, setIsInvalid] = useState<boolean>(false);
   const [content, setContent] = useState<{
+    iconFile: RcFile | null;
     title: string;
     modelFile: RcFile | null;
     labels: PartialLabel[] | null;
   }>({
+    iconFile: null,
     title: "",
     modelFile: null,
     labels: [],
@@ -101,8 +90,15 @@ export const LectureBuilder = (props: LectureProps) => {
       case "lecture":
         return (
           <Lecture
+            iconFile={content.iconFile}
             title={content.title}
             onIsInvalidChange={setIsInvalid}
+            onIconFileChange={(iconFile) => {
+              setContent((previousContent) => ({
+                ...previousContent,
+                iconFile,
+              }));
+            }}
             onTitleChange={(title) => {
               setContent((previousContent) => ({ ...previousContent, title }));
             }}
@@ -165,6 +161,7 @@ export const LectureBuilder = (props: LectureProps) => {
       addLectureMutation.mutate({
         ...content,
         model: content.modelFile,
+        icon: content.iconFile,
         labels: JSON.stringify(content.labels),
       });
       props.onClose();
