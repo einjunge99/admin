@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import Modal from "antd/es/modal/Modal";
 import { RcFile } from "antd/es/upload";
 import { PartialLabel } from "./types";
@@ -8,7 +8,7 @@ import { Lecture } from "./components/lecture";
 import { Typography } from "antd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addLecture } from "../../client/api";
-import { NotificationContext } from "../root";
+import { useNotification } from "../../providers/notification";
 
 // const props: UploadProps = {
 //   beforeUpload: (file) => {
@@ -57,7 +57,7 @@ const BUTTON_TEXT_PER_STEP: Record<
 };
 
 export const Module = (props: ModuleProps) => {
-  const context = useContext(NotificationContext);
+  const context = useNotification();
   const queryClient = useQueryClient();
   const [step, setStep] = useState<StepType>("lecture");
   const [isModelDisabled, setIsModelDisabled] = useState(false);

@@ -1,0 +1,54 @@
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+.leftPanel {
+  background-color: #a6c3a3;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+}
+
+.intro {
+  max-width: 400px;
+}
+
+.image {
+  margin-bottom: 20px;
+}
+
+.image img {
+  width: 100%;
+}
+
+.rightPanel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.forgot {
+  float: right;
+}
+
+.signInButton {
+  width: 100%;
+}
+
+.googleSignIn {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.createAccount {
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+}
