@@ -1,5 +1,5 @@
 import { RcFile, UploadProps } from "antd/es/upload";
-import { Label, PartialLabel } from "../types";
+import { PartialLabel } from "../types";
 import { useEffect } from "react";
 import Papa from "papaparse";
 import styles from "./file-upload.module.scss";

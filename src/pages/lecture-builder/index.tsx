@@ -158,13 +158,17 @@ export const LectureBuilder = (props: LectureProps) => {
     if (nextIndex < STEPS.length) {
       setStep(STEPS[nextIndex]);
     } else {
+      const { modelFile, iconFile } = content;
+      if (!iconFile) {
+        // TODO: handle case, but this is highly unlikely to happen.
+        return;
+      }
       addLectureMutation.mutate({
         ...content,
-        model: content.modelFile,
-        icon: content.iconFile,
+        model: modelFile,
+        icon: iconFile,
         labels: JSON.stringify(content.labels),
       });
-      props.onClose();
     }
   };
 

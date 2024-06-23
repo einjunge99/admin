@@ -1,11 +1,10 @@
 import axios, { AxiosInstance } from "axios";
-import { Label, PartialLabel } from "../pages/lecture-builder/types";
+import { Label } from "../pages/lecture-builder/types";
 import { RcFile } from "antd/es/upload";
-
-const API_URL = "http://0.0.0.0:8080/api/v1";
+import { CONFIG } from "../config";
 
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: API_URL,
+  baseURL: CONFIG.API_URL,
 });
 
 export type Lecture = {
@@ -20,8 +19,9 @@ export const getLectures = async (): Promise<Lecture[]> => {
   return data;
 };
 
-export type AddLecturePayload = Omit<Lecture, "id" | "modelUrl"> & {
+export type AddLecturePayload = Omit<Lecture, "id" | "modelUrl" | "labels"> & {
   model: RcFile | null;
+  icon: RcFile;
   labels: string;
 };
 

@@ -1,5 +1,5 @@
 import { NotificationArgsProps, notification } from "antd";
-import { createContext, useContext } from "react";
+import { FC, ReactNode, createContext, useContext } from "react";
 
 type NotificationType = "success" | "info" | "warning" | "error";
 
@@ -13,7 +13,13 @@ export const useNotification = () => {
   return useContext(NotificationContext);
 };
 
-export const NotificationProvider = ({ children }) => {
+type NotificationProviderProps = {
+  children: ReactNode;
+};
+
+export const NotificationProvider: FC<NotificationProviderProps> = ({
+  children,
+}) => {
   const [api, contextHolder] = notification.useNotification();
 
   const notify = (

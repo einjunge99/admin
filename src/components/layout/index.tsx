@@ -1,11 +1,12 @@
-import { Card, Layout, Menu, MenuProps, theme } from "antd";
+import { Card, Layout, Menu, MenuProps, Typography, theme } from "antd";
 import styles from "./styles.module.scss";
 import Sider from "antd/es/layout/Sider";
 import { Content, Header } from "antd/es/layout/layout";
 import { MenuItemGroupProps } from "antd/es/menu";
 import { SettingOutlined, LogoutOutlined } from "@ant-design/icons";
 import { useAuth } from "../../providers/auth";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { FC, ReactNode, useMemo } from "react";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -28,9 +29,23 @@ const items: MenuItem[] = [
   getItem("Cerrar sesión", "logout", <LogoutOutlined />),
 ];
 
-export const BaseLayout = ({ children }) => {
+type LayoutProps = {
+  children: ReactNode;
+};
+
+export const BaseLayout: FC<LayoutProps> = ({ children }) => {
   const { logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const headerTitle = useMemo(() => {
+    switch (location.pathname) {
+      case "/":
+        return "Lecciones";
+      case "/account":
+        return "Mi cuenta";
+    }
+  }, [location.pathname]);
 
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -66,7 +81,17 @@ export const BaseLayout = ({ children }) => {
         </div>
       </Sider>
       <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }}></Header>
+        <Header
+          style={{
+            padding: 0,
+            paddingLeft: 16,
+            background: colorBgContainer,
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <Typography.Title>{headerTitle}</Typography.Title>
+        </Header>
         <Content
           style={{
             margin: "24px 16px",

@@ -1,15 +1,15 @@
-// firebase.js
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { CONFIG } from "../config";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyA5tSFPkAyN4RjvcTaCtu-EA5o76pZZYjg",
-  authDomain: "sign-language-learning.firebaseapp.com",
-  projectId: "sign-language-learning",
-  storageBucket: "sign-language-learning.appspot.com",
-  messagingSenderId: "746713987134",
-  appId: "1:746713987134:web:30950ac0ae4a74e2e6b96f",
-  measurementId: "G-RHZ1FHFZWB",
+  apiKey: CONFIG.FIREBASE_API_KEY,
+  authDomain: CONFIG.FIREBASE_AUTH_DOMAIN,
+  projectId: CONFIG.FIREBASE_PROJECT_ID,
+  storageBucket: CONFIG.FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: CONFIG.FIREBASE_MESSAGING_SENDER_ID,
+  appId: CONFIG.FIREBASE_APP_ID,
+  measurementId: CONFIG.FIREBASE_MEASUREMENT_ID,
 };
 
 const app = initializeApp(firebaseConfig);

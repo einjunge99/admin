@@ -6,7 +6,7 @@ type LecturesTableProps = {
   isLoading: boolean;
 };
 
-// Renderizar estado como toggle
+// TODO: render status as toggle
 export const LecturesTable = (props: LecturesTableProps) => {
   const columns: TableProps<Lecture>["columns"] = [
     {
@@ -23,17 +23,6 @@ export const LecturesTable = (props: LecturesTableProps) => {
   ];
 
   return (
-    <Table
-      loading={props.isLoading}
-      columns={columns}
-      data={props.data}
-      onRow={() => {
-        return {
-          onClick: (event) => {
-            console.log("clicked");
-          }, // click row
-        };
-      }}
-    />
+    <Table loading={props.isLoading} columns={columns} data={props.data} />
   );
 };

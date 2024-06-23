@@ -1,4 +1,11 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  FC,
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import "firebase/auth";
 import { useMutation } from "@tanstack/react-query";
 import { auth, googleProvider, signInWithPopup } from "../firebase";
@@ -19,7 +26,7 @@ const AuthContext = createContext<{
   error: unknown | null;
   loginWithGoogle: () => void;
   loginWithEmailAndPassword: (email: string, password: string) => void;
-  logout: () => void;
+  logout: () => Promise<void>;
   deleteAccount: () => void;
 }>({
   isLoading: false,
@@ -27,7 +34,7 @@ const AuthContext = createContext<{
   error: null,
   loginWithGoogle: () => {},
   loginWithEmailAndPassword: () => {},
-  logout: () => {},
+  logout: () => Promise.resolve(),
   deleteAccount: () => {},
 });
 
@@ -35,13 +42,17 @@ export const useAuth = () => {
   return useContext(AuthContext);
 };
 
-export const AuthProvider = ({ children }) => {
+type AuthProviderProps = {
+  children: ReactNode;
+};
+
+export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [authUser, setAuthUser] = useState<AuthUser | null>(null);
-  const [error, setError] = useState();
+  const [error, setError] = useState<null | unknown>();
   const [isLoading, setIsLoading] = useState(true);
 
-  const handleError = (error) => {
+  const handleError = (error: unknown) => {
     setError(error);
     setTimeout(() => {
       setError(null);
@@ -85,8 +96,8 @@ export const AuthProvider = ({ children }) => {
     authUser?.delete();
   };
 
-  const logout = () => {
-    auth.signOut();
+  const logout = async () => {
+    await auth.signOut();
   };
 
   return (

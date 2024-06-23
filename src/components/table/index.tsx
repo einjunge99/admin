@@ -21,7 +21,16 @@ export const Table = <T extends object>({
   ...props
 }: TableProps<T>) => {
   return (
-    <ConfigProvider renderEmpty={emptyComponent}>
+    <ConfigProvider
+      renderEmpty={emptyComponent}
+      theme={{
+        components: {
+          Table: {
+            headerBg: "#cccccc",
+          },
+        },
+      }}
+    >
       <AntdTable
         {...props}
         dataSource={data}

@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import { useNotification } from "../../providers/notification";
 import { useEffect } from "react";
 import { FirebaseError } from "firebase/app";
-import { AuthErrorCodes } from "firebase/auth";
 
 export const Login = () => {
   const { user, error, loginWithEmailAndPassword, loginWithGoogle } = useAuth();

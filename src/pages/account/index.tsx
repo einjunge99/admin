@@ -1,5 +1,5 @@
 import { BaseLayout } from "../../components/layout";
-import { Card, Descriptions, Divider, Form, Input, Typography } from "antd";
+import { Card, Descriptions, Form, Input, Typography } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../providers/auth";
@@ -7,6 +7,7 @@ import { useAuth } from "../../providers/auth";
 import styles from "./styles.module.scss";
 import Paragraph from "antd/es/typography/Paragraph";
 import { Button } from "../../components/button";
+import { RuleObject } from "antd/es/form";
 
 export const Account = () => {
   const { user, deleteAccount } = useAuth();
@@ -24,7 +25,7 @@ export const Account = () => {
       .catch(() => setIsDeleteDisabled(true));
   }, [form, values]);
 
-  const validateExactString = (_, value) => {
+  const validateExactString = (_: RuleObject, value: string) => {
     if (value === "Eliminar mi cuenta") {
       return Promise.resolve();
     }
