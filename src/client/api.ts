@@ -4,7 +4,7 @@ import { RcFile } from "antd/es/upload";
 import { CONFIG } from "../config";
 
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: CONFIG.API_URL,
+  baseURL: `${CONFIG.API_URL}/api/v1`,
 });
 
 export type Lecture = {
