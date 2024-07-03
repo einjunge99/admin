@@ -7,6 +7,7 @@ import { SettingOutlined, LogoutOutlined } from "@ant-design/icons";
 import { useAuth } from "../../providers/auth";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FC, ReactNode, useMemo } from "react";
+import LoginImage from "../../assets/login.png";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -68,7 +69,13 @@ export const BaseLayout: FC<LayoutProps> = ({ children }) => {
     <Layout style={{ minHeight: "100vh" }}>
       <Sider>
         <div className={styles.sider}>
-          <Card onClick={() => navigate("/")}>Enseñas</Card>
+          <img
+            src={LoginImage}
+            alt="login-image"
+            onClick={() => navigate("/")}
+            style={{ width: "100%", cursor: "pointer" }}
+          />
+
           <Menu
             theme="dark"
             selectedKeys={["logout"]}

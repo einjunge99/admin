@@ -29,7 +29,7 @@ export const Lectures = () => {
             alignSelf: "end",
           }}
           type="primary"
-          label="Agregar curso"
+          label="Agregar lección"
           icon={<PlusOutlined />}
           onClick={() => {
             setIsModalOpen(true);

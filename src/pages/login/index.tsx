@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useNotification } from "../../providers/notification";
 import { useEffect } from "react";
 import { FirebaseError } from "firebase/app";
+import LoginImage from "../../assets/login.png";
 
 export const Login = () => {
   const { user, error, loginWithEmailAndPassword, loginWithGoogle } = useAuth();
@@ -50,14 +51,8 @@ export const Login = () => {
       <div className={styles.leftPanel}>
         <div className={styles.intro}>
           <div className={styles.image}>
-            {/* Replace with your SVG or image */}
-            <img src="path_to_your_image" alt="Lovebirds" />
+            <img src={LoginImage} alt="login-image" />
           </div>
-          <h2>Maecenas mattis egestas</h2>
-          <p>
-            Erdum et malesuada fames ac ante ipsum primis in faucibus
-            suspendisse porta.
-          </p>
         </div>
       </div>
       <div className={styles.rightPanel}>
