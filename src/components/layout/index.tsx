@@ -1,4 +1,4 @@
-import { Card, Layout, Menu, MenuProps, Typography, theme } from "antd";
+import { Layout, Menu, MenuProps, Typography, theme } from "antd";
 import styles from "./styles.module.scss";
 import Sider from "antd/es/layout/Sider";
 import { Content, Header } from "antd/es/layout/layout";
