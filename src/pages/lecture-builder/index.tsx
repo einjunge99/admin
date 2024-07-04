@@ -43,6 +43,13 @@ const BUTTON_TEXT_PER_STEP: Record<
   },
 };
 
+const DEFAULT_CONTENT = {
+  iconFile: null,
+  title: "",
+  modelFile: null,
+  labels: [],
+};
+
 export const LectureBuilder = (props: LectureProps) => {
   const context = useNotification();
   const queryClient = useQueryClient();
@@ -55,12 +62,7 @@ export const LectureBuilder = (props: LectureProps) => {
     title: string;
     modelFile: RcFile | null;
     labels: PartialLabel[] | null;
-  }>({
-    iconFile: null,
-    title: "",
-    modelFile: null,
-    labels: [],
-  });
+  }>(DEFAULT_CONTENT);
 
   const addLectureMutation = useMutation({
     mutationFn: addLecture,
@@ -172,6 +174,15 @@ export const LectureBuilder = (props: LectureProps) => {
     }
   };
 
+  const handleClose = () => {
+    setIsModelDisabled(false);
+    setContent(DEFAULT_CONTENT);
+    setStep("lecture");
+    setLabelsFile(null);
+    setIsInvalid(false);
+    props.onClose();
+  };
+
   const handlePreviousStep = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
@@ -182,10 +193,10 @@ export const LectureBuilder = (props: LectureProps) => {
       if (prevIndex >= 0) {
         setStep(STEPS[prevIndex]);
       } else {
-        props.onClose();
+        handleClose();
       }
     } else {
-      props.onClose();
+      handleClose();
     }
   };
 
