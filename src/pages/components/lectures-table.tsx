@@ -23,6 +23,12 @@ export const LecturesTable = (props: LecturesTableProps) => {
   ];
 
   return (
-    <Table loading={props.isLoading} columns={columns} data={props.data} />
+    <Table
+      loading={props.isLoading}
+      columns={columns}
+      data={props.data}
+      scroll={{ y: 500 }}
+      pagination={{ pageSize: 10 }}
+    />
   );
 };
